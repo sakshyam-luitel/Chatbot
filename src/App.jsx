@@ -24,7 +24,7 @@ const App = () => {
   const time = dayjs().valueOf();
 
   return (
-    <div className="max-w-2xl mx-auto h-screen flex flex-col bg-white shadow-lg overflow-hidden sm:border-x sm:border-gray-200">
+    <div className="max-w-2xl mx-auto flex flex-col bg-white shadow-lg overflow-hidden sm:border-x sm:border-gray-200 h-dvh">
       {chatMessages.length === 0 && (
         <div className="flex-1 flex items-center justify-center p-6 text-center">
           <p className="text-gray-500 text-lg">
