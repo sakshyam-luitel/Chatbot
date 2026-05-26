@@ -34,7 +34,7 @@ function ChatInput({ chatMessages, setChatMessages }) {
     ];
     setChatMessages(newChatMessages);
 
-    // ✅ Store a flag instead of JSX
+    // Store a flag instead of JSX
     setChatMessages([
       ...newChatMessages,
       {
@@ -48,7 +48,7 @@ function ChatInput({ chatMessages, setChatMessages }) {
     setInputText("");
 
     const client = new Groq({
-      apiKey: import.meta.env.VITE_GROQ_API_KEY, // ✅ correct prefix
+      apiKey: import.meta.env.VITE_GROQ_API_KEY, //  correct prefix
       dangerouslyAllowBrowser: true,
     });
 
@@ -57,7 +57,7 @@ function ChatInput({ chatMessages, setChatMessages }) {
       messages: [{ role: "user", content: inputText }],
     });
 
-    // ✅ Extract text from response
+    // Extract text from response
     const replyText = response.choices[0].message.content;
 
     setChatMessages([
@@ -79,24 +79,23 @@ function ChatInput({ chatMessages, setChatMessages }) {
   }
 
   return (
-    <div className="flex justify-center items-center p-4 bg-white border-t sm:border-gray-200">
+    <div className="flex justify-center items-center p-3 lg:px-4 sm:p-4 bg-white border-t sm:border-gray-200 sm:m-4">
       <input
         placeholder="Send a message to Chatbot"
-        size="30"
         onChange={saveInputText}
         onKeyDown={saveInputTextByKey}
         value={inputText}
-        className="flex-grow px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow text-sm sm:text-base mr-3"
+        className="flex-grow w-full min-w-0 px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-shadow text-sm sm:text-base mr-2 sm:mr-3"
       />
       <button
         onClick={sendMessage}
-        className="px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-full transition-colors mr-2 text-sm sm:text-base shadow-sm"
+        className="px-4 py-2 sm:px-5 sm:py-3 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-medium rounded-full transition-colors mr-2 text-sm sm:text-base shadow-sm shrink-0"
       >
         Send
       </button>
       <button
         onClick={clearMessage}
-        className="px-5 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium rounded-full transition-colors text-sm sm:text-base"
+        className="px-4 py-2 sm:px-5 sm:py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium rounded-full transition-colors text-sm sm:text-base shrink-0"
       >
         Clear
       </button>

@@ -26,11 +26,11 @@ function ChatMessage(
         </>
       )}
       <div
-        className={`relative px-4 py-3 rounded-2xl mx-3 max-w-[75%] shadow-sm ${sender === "user" ? "bg-blue-500 text-white rounded-br-none" : "bg-gray-100 text-gray-800 rounded-bl-none"}`}
+        className={`relative px-4 py-3 rounded-2xl mx-3 max-w-[75%] shadow-sm ${sender === "user" ? "bg-yellow-400 text-gray-900 rounded-br-none" : "bg-white border border-gray-200 text-gray-800 rounded-bl-none"}`}
       >
         <div className="break-words">{message}</div>
         <p
-          className={`text-xs mt-1 ${sender === "user" ? "text-blue-100" : "text-gray-500"}`}
+          className={`text-xs mt-1 ${sender === "user" ? "text-yellow-800" : "text-gray-500"}`}
         >
           {dayjs(time).format("h:mma")}
         </p>

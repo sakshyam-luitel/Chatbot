@@ -28,7 +28,7 @@ const App = () => {
       {chatMessages.length === 0 && (
         <div className="flex-1 flex items-center justify-center p-6 text-center">
           <p className="text-gray-500 text-lg">
-            Welcome to the chatbot project! Send a message using the textbox
+            Welcome to the chatbot. Send a message using the textbox
             below.
           </p>
         </div>
