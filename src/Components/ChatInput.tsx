@@ -2,16 +2,23 @@ import React from "react";
 import LoadingSpinner from "../assets/loading-spinner.gif";
 import dayjs from "dayjs";
 import Groq from "groq-sdk";
+import { useState } from "react";
+import { ChangeEvent , KeyboardEvent } from "react";
 
-function ChatInput({ chatMessages, setChatMessages }) {
-  const [inputText, setInputText] = React.useState("");
-  const [isLoading, setIsLoading] = React.useState(false);
+interface ChatInputProps {
+  chatMessages : string,
+  setChatMessages : any
+}
 
-  function saveInputText(event) {
+function ChatInput({ chatMessages, setChatMessages } : ChatInputProps) {
+  const [inputText, setInputText] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  function saveInputText(event : ChangeEvent<HTMLInputElement>) {
     setInputText(event.target.value);
   }
 
-  function saveInputTextByKey(event) {
+  function saveInputTextByKey(event: KeyboardEvent<HTMLInputElement>) {
     if (event.key === "Enter") {
       sendMessage();
     } else if (event.key === "Escape") {

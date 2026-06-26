@@ -3,15 +3,7 @@ import UserProfilePicture from "../assets/user.png";
 import UserProfilePicture1 from "../assets/IMG_4999.jpg";
 import dayjs from "dayjs";
 
-function ChatMessage(
-  props /*or can destructure on this parameter{message,sender}*/,
-) {
-  const message = props.message; // const {message} = props;
-  const sender = props.sender; //  const {sender} = props;
-  // or collectively const {message , sender} = props; This is called
-  //as destructuring
-  const time = props.time;
-
+function ChatMessage({message , sender , time}) {
   return (
     <div
       className={`flex w-full ${sender === "user" ? "justify-end" : "justify-start"} items-start mb-4`}

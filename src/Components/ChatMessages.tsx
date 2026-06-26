@@ -2,7 +2,11 @@ import { useRef } from "react";
 import { useEffect } from "react";
 import ChatMessage from "./ChatMessage";
 
-function ChatMessages({ chatMessages }) {
+interface ChatMessagesProps {
+  chatMessages : String
+}
+
+function ChatMessages({ chatMessages }: ChatMessagesProps) {
   // const array = React.useState([
   //     {message : "hello chatbot" , sender : "user" , id :"id1"},
   //     {message : "Hello! How can I help you?" , sender : "chatbot" , id:'id2'},

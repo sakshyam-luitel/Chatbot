@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import ChatInput from "./Components/ChatInput";
 import ChatMessages from "./Components/ChatMessages";
-import { chatbot } from "supersimpledev";
+import chatbot from "supersimpledev";
 import dayjs from "dayjs";
 
 const App = () => {
@@ -15,7 +15,7 @@ const App = () => {
       ],
   );
   useEffect(() => {
-    chatbot.addResponses(chatMessages);
+    //chatbot.addResponses(chatMessages);
   }, []);
   useEffect(() => {
     localStorage.setItem("messages", JSON.stringify(chatMessages));
