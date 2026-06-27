@@ -3,7 +3,13 @@ import UserProfilePicture from "../assets/user.png";
 import UserProfilePicture1 from "../assets/IMG_4999.jpg";
 import dayjs from "dayjs";
 
-function ChatMessage({message , sender , time}) {
+interface ChatMessageProps{
+  message : string ,
+  sender : string ,
+  time : string
+}
+
+function ChatMessage({message , sender , time} : ChatMessageProps) {
   return (
     <div
       className={`flex w-full ${sender === "user" ? "justify-end" : "justify-start"} items-start mb-4`}

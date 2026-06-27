@@ -64,6 +64,7 @@ function ChatInput({ chatMessages, setChatMessages } : ChatInputProps) {
       messages: [{ role: "user", content: inputText }],
     });
 
+    console.log(response)
     // Extract text from response
     const replyText = response.choices[0].message.content;
 
