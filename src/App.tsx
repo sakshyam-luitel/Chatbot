@@ -1,45 +1,53 @@
 import { useState, useEffect } from "react";
 import ChatInput from "./Components/ChatInput";
 import ChatMessages from "./Components/ChatMessages";
-import chatbot from "supersimpledev";
-import dayjs from "dayjs";
+
+export interface ChatMessageData {
+  message: string;
+  sender: "user" | "chatbot";
+  id: string;
+  time: number;
+  isLoading?: boolean;
+}
+
+function getSavedMessages(): ChatMessageData[] {
+  try {
+    const savedMessages = localStorage.getItem("messages");
+    return savedMessages ? JSON.parse(savedMessages) : [];
+  } catch {
+    return [];
+  }
+}
 
 const App = () => {
-  const [chatMessages, setChatMessages] = useState(
-    JSON.parse(localStorage.getItem("messages")) ||
-      [
-        // {message : "hello chatbot" , sender : "user" , id :"id1"},
-        // {message : "Hello! How can I help you?" , sender : "chatbot" , id:'id2'},
-        // {message : "can you get me todays date?" , sender : "user" , id: "id3"},
-        // {message : "Today is September 27" , sender : "chatbot" , id:"id4"},
-      ],
-  );
-  useEffect(() => {
-    //chatbot.addResponses(chatMessages);
-  }, []);
+  const [chatMessages, setChatMessages] = useState<ChatMessageData[]>(getSavedMessages);
+
   useEffect(() => {
     localStorage.setItem("messages", JSON.stringify(chatMessages));
   }, [chatMessages]);
 
-  const time = dayjs().valueOf();
-
   return (
-    <div className="max-w-2xl mx-auto flex flex-col bg-white shadow-lg overflow-hidden sm:border-x sm:border-gray-200 h-dvh">
-      {chatMessages.length === 0 && (
-        <div className="flex-1 flex items-center justify-center p-6 text-center">
-          <p className="text-gray-500 text-lg">
-            Welcome to the chatbot. Send a message using the textbox
-            below.
-          </p>
-        </div>
-      )}
+    <div className="h-dvh w-full overflow-hidden bg-white">
+      <div className="flex h-full w-full flex-col overflow-hidden bg-white">
+        <header className="shrink-0 border-b border-amber-100 bg-amber-400 px-4 py-3 sm:px-6 sm:py-4">
+          <h1 className="text-lg font-semibold text-gray-900">Chatbot</h1>
+          <p className="text-sm text-amber-950">A simple AI assistant for helpful conversations.</p>
+        </header>
 
-      <ChatMessages chatMessages={chatMessages} time={time} />
+        {chatMessages.length === 0 && (
+          <div className="flex flex-1 items-center justify-center p-6 text-center">
+            <p className="text-gray-500">Send a message to start a conversation.</p>
+          </div>
+        )}
 
-      <ChatInput
-        chatMessages={chatMessages}
-        setChatMessages={setChatMessages}
-      />
+        <ChatMessages chatMessages={chatMessages} />
+
+        <ChatInput chatMessages={chatMessages} setChatMessages={setChatMessages} />
+
+        <footer className="border-t border-gray-100 px-5 py-2 text-center text-xs text-gray-400">
+          Chatbot project
+        </footer>
+      </div>
     </div>
   );
 };

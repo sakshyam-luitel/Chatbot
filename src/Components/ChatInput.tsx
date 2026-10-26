@@ -1,13 +1,12 @@
-import React from "react";
-import LoadingSpinner from "../assets/loading-spinner.gif";
 import dayjs from "dayjs";
 import Groq from "groq-sdk";
 import { useState } from "react";
 import { ChangeEvent , KeyboardEvent } from "react";
+import type { ChatMessageData } from "../App";
 
 interface ChatInputProps {
-  chatMessages : string,
-  setChatMessages : any
+  chatMessages: ChatMessageData[];
+  setChatMessages: (messages: ChatMessageData[]) => void;
 }
 
 function ChatInput({ chatMessages, setChatMessages } : ChatInputProps) {
@@ -27,13 +26,14 @@ function ChatInput({ chatMessages, setChatMessages } : ChatInputProps) {
   }
 
   async function sendMessage() {
-    if (isLoading || inputText === "") return;
+    const messageText = inputText.trim();
+    if (isLoading || messageText === "") return;
     setIsLoading(true);
 
     const newChatMessages = [
       ...chatMessages,
       {
-        message: inputText,
+        message: messageText,
         sender: "user",
         id: crypto.randomUUID(),
         time: dayjs().valueOf(),
@@ -59,51 +59,57 @@ function ChatInput({ chatMessages, setChatMessages } : ChatInputProps) {
       dangerouslyAllowBrowser: true,
     });
 
-    const response = await client.chat.completions.create({
-      model: "llama-3.3-70b-versatile",
-      messages: [{ role: "user", content: inputText }],
-    });
+    try {
+      const response = await client.chat.completions.create({
+        model: "llama-3.3-70b-versatile",
+        messages: [{ role: "user", content: messageText }],
+      });
+      const replyText = response.choices[0]?.message?.content;
+      if (!replyText) throw new Error("The assistant returned an empty response.");
 
-    console.log(response)
-    // Extract text from response
-    const replyText = response.choices[0].message.content;
-
-    setChatMessages([
-      ...newChatMessages,
-      {
-        message: replyText,
-        sender: "chatbot",
-        isLoading: false,
-        id: crypto.randomUUID(),
-        time: dayjs().valueOf(),
-      },
-    ]);
-    setIsLoading(false);
+      setChatMessages([
+        ...newChatMessages,
+        { message: replyText, sender: "chatbot", id: crypto.randomUUID(), time: dayjs().valueOf() },
+      ]);
+    } catch (error) {
+      console.error("Unable to send chat message", error);
+      setChatMessages([
+        ...newChatMessages,
+        {
+          message: "I couldn't send that message. Please check your API key and try again.",
+          sender: "chatbot",
+          id: crypto.randomUUID(),
+          time: dayjs().valueOf(),
+        },
+      ]);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   function clearMessage() {
     setChatMessages([]);
-    localStorage.clear("messages");
+    localStorage.removeItem("messages");
   }
 
   return (
-    <div className="flex justify-center items-center p-3 lg:px-4 sm:p-4 bg-white border-t sm:border-gray-200 sm:m-4">
+    <div className="flex shrink-0 items-center justify-center gap-2 border-t border-gray-200 bg-white p-3 sm:gap-3 sm:px-6 sm:py-4">
       <input
         placeholder="Send a message to Chatbot"
         onChange={saveInputText}
         onKeyDown={saveInputTextByKey}
         value={inputText}
-        className="flex-grow w-full min-w-0 px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-shadow text-sm sm:text-base mr-2 sm:mr-3"
+        className="min-w-0 flex-1 rounded-full border border-gray-300 px-4 py-3 text-sm transition-shadow focus:border-transparent focus:outline-none focus:ring-2 focus:ring-yellow-400 sm:text-base"
       />
       <button
         onClick={sendMessage}
-        className="px-4 py-2 sm:px-5 sm:py-3 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-medium rounded-full transition-colors mr-2 text-sm sm:text-base shadow-sm shrink-0"
+        className="shrink-0 rounded-full bg-yellow-400 px-4 py-2 text-sm font-medium text-gray-900 shadow-sm transition-colors hover:bg-yellow-500 sm:px-5 sm:py-3 sm:text-base"
       >
         Send
       </button>
       <button
         onClick={clearMessage}
-        className="px-4 py-2 sm:px-5 sm:py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium rounded-full transition-colors text-sm sm:text-base shrink-0"
+        className="shrink-0 rounded-full bg-gray-200 px-4 py-2 text-sm font-medium text-gray-800 transition-colors hover:bg-gray-300 sm:px-5 sm:py-3 sm:text-base"
       >
         Clear
       </button>
